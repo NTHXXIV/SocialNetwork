@@ -13,7 +13,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import { useNavigate, useLocation, Link as RouterLink } from "react-router-dom";
 
-import { FCheckbox, FormProvider, FTextField } from "../component/form";
+import { FCheckbox, FormProvider, FTextField } from "../components/form";
 import useAuth from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

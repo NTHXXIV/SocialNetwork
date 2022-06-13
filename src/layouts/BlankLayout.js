@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Logo from "../component/Logo";
+import Logo from "../components/Logo";
 import { Stack } from "@mui/material";
 
 function BlankLayout() {

@@ -5,7 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 function Logo({ disabledLink = false, sx }) {
   const logo = (
-    <Box sx={{ width: 60, eight: 60, ...sx }}>
+    <Box sx={{ width: 100, ...sx }}>
       <LogoSVG />
     </Box>
   );
