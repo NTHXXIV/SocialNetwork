@@ -102,18 +102,10 @@ function MainHeader() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{}}
           >
             <Logo />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            CoderComm
-          </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
           <Box>

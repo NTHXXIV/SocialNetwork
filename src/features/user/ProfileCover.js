@@ -8,7 +8,7 @@ import FriendStatus from "../friend/FriendStatus";
 const RootStyle = styled("div")(({ theme }) => ({
   "&:before": {
     backdropFilter: `blur(1px)`,
-    backgroundColor: alpha(theme.palette.primary.darker, 0.7),
+    backgroundColor: alpha(theme.palette.primary.dark, 0.7),
     top: 0,
     zIndex: 9,
     content: "''",
@@ -98,13 +98,15 @@ function ProfileCover({ profile }) {
         </Box>
       </InfoStyle>
       <Box sx={{ overflow: "hidden" }}>
-        <img
-          src={coverUrl}
-          alt="profile cover"
-          width="100%"
-          height="100%"
-          onError={handleError}
-        />
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            alt="profile cover"
+            width="100%"
+            height="100%"
+            onError={handleError}
+          />
+        ) : null}
       </Box>
     </RootStyle>
   );

@@ -101,6 +101,20 @@ export const createPost =
     }
   };
 
+// export const removePost = (postId) => async (dispatch) => {
+//   dispatch(slice.actions.startLoading());
+//   try {
+//     const response = await apiService.delete(`/posts/${postId}`);
+//     dispatch(
+//       slice.actions.removeFriendSuccess({ ...response.data, postId })
+//     );
+//     toast.success("Friend removed");
+//   } catch (error) {
+//     dispatch(slice.actions.hasError(error.message));
+//     toast.error(error.message);
+//   }
+// };
+
 export const sendPostReaction =
   ({ postId, emoji }) =>
   async (dispatch) => {
