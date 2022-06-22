@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Box, Card, alpha, Stack } from "@mui/material";
 
 import { FormProvider, FTextField, FUploadImage } from "../../components/form";
@@ -8,23 +8,29 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { createPost } from "./postSlice";
 import { LoadingButton } from "@mui/lab";
+import { selectPost } from "../post/postSlice";
 
 const yupSchema = Yup.object().shape({
   content: Yup.string().required("Content is required"),
 });
 
-const defaultValues = {
-  content: "",
-  image: null,
-};
-
 function PostForm() {
-  const { isLoading } = useSelector((state) => state.post);
+  const { isLoading, editingPostId, postsById } = useSelector(
+    (state) => state.post
+  );
+  const [defaultValues, setDefaultValues] = useState({
+    content: "",
+    image: null,
+  });
+  useEffect(() => {
+    setValue("content", editingPostId ? postsById[editingPostId].content : "");
+  }, [editingPostId]);
 
   const methods = useForm({
     resolver: yupResolver(yupSchema),
     defaultValues,
   });
+
   const {
     handleSubmit,
     reset,
@@ -50,11 +56,19 @@ function PostForm() {
   );
 
   const onSubmit = (data) => {
-    dispatch(createPost(data)).then(() => reset());
+    // update
+    if (editingPostId) {
+      // dispatch(updatePost(data)).then(() => reset());
+      console.log("hahahha");
+    } else {
+      dispatch(createPost(data)).then(() => reset());
+    }
+
+    // create
   };
 
   return (
-    <Card sx={{ p: 3 }}>
+    <Card id="create-form" sx={{ p: 3 }}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           <FTextField
@@ -93,6 +107,14 @@ function PostForm() {
             >
               Post
             </LoadingButton>
+            <button
+              type="button"
+              onClick={() => {
+                dispatch(selectPost(""));
+              }}
+            >
+              Cancel
+            </button>
           </Box>
         </Stack>
       </FormProvider>

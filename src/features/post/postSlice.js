@@ -10,6 +10,7 @@ const initialState = {
   error: null,
   postsById: {},
   currentPagePosts: [],
+  editingPostId: "",
 };
 
 const slice = createSlice({
@@ -43,12 +44,27 @@ const slice = createSlice({
       state.totalPosts = count;
     },
 
+    selectPost(state, action) {
+      state.editingPostId = action.payload;
+    },
+
+    deletePostSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const postId = action.payload;
+      delete state.postsById[postId];
+      state.currentPagePosts = state.currentPagePosts.filter(
+        (e) => e !== postId
+      );
+    },
+
     createPostSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
       const newPost = action.payload;
-      if (state.currentPagePosts.length % POSTS_PER_PAGE === 0)
+      if (state.currentPagePosts.length % POSTS_PER_PAGE === 0) {
         state.currentPagePosts.pop();
+      }
       state.postsById[newPost._id] = newPost;
       state.currentPagePosts.unshift(newPost._id);
     },
@@ -101,19 +117,18 @@ export const createPost =
     }
   };
 
-// export const removePost = (postId) => async (dispatch) => {
-//   dispatch(slice.actions.startLoading());
-//   try {
-//     const response = await apiService.delete(`/posts/${postId}`);
-//     dispatch(
-//       slice.actions.removeFriendSuccess({ ...response.data, postId })
-//     );
-//     toast.success("Friend removed");
-//   } catch (error) {
-//     dispatch(slice.actions.hasError(error.message));
-//     toast.error(error.message);
-//   }
-// };
+export const removePost = (postId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    await apiService.delete(`/posts/${postId}`);
+    dispatch(slice.actions.deletePostSuccess(postId));
+
+    toast.success("Post removed");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error(error.message);
+  }
+};
 
 export const sendPostReaction =
   ({ postId, emoji }) =>
@@ -136,3 +151,7 @@ export const sendPostReaction =
       toast.error(error.message);
     }
   };
+
+export const selectPost = (id) => (dispatch) => {
+  dispatch(slice.actions.selectPost(id));
+};
