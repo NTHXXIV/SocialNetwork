@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { createPost } from "./postSlice";
 import { LoadingButton } from "@mui/lab";
-import { selectPost } from "../post/postSlice";
+import { selectPost, updatePost } from "../post/postSlice";
 
 const yupSchema = Yup.object().shape({
   content: Yup.string().required("Content is required"),
@@ -18,12 +18,14 @@ function PostForm() {
   const { isLoading, editingPostId, postsById } = useSelector(
     (state) => state.post
   );
-  const [defaultValues, setDefaultValues] = useState({
+  const defaultValues = {
     content: "",
     image: null,
-  });
+  };
+
   useEffect(() => {
     setValue("content", editingPostId ? postsById[editingPostId].content : "");
+    setValue("image", editingPostId ? postsById[editingPostId].image : null);
   }, [editingPostId]);
 
   const methods = useForm({
@@ -58,8 +60,7 @@ function PostForm() {
   const onSubmit = (data) => {
     // update
     if (editingPostId) {
-      // dispatch(updatePost(data)).then(() => reset());
-      console.log("hahahha");
+      dispatch(updatePost({ ...data, id: editingPostId })).then(() => reset());
     } else {
       dispatch(createPost(data)).then(() => reset());
     }

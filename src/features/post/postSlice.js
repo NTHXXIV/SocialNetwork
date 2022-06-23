@@ -69,6 +69,14 @@ const slice = createSlice({
       state.currentPagePosts.unshift(newPost._id);
     },
 
+    updatePostSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const updatedPost = action.payload;
+      state.postsById[updatedPost._id].content = updatedPost.content;
+      state.postsById[updatedPost._id].image = updatedPost.image;
+    },
+
     sendPostReactionSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
@@ -108,6 +116,7 @@ export const createPost =
         content,
         image: imageUrl,
       });
+
       dispatch(slice.actions.createPostSuccess(response.data));
       toast.success("Post successfully");
       dispatch(getCurrentUserProfile());
@@ -117,18 +126,45 @@ export const createPost =
     }
   };
 
-export const removePost = (postId) => async (dispatch) => {
-  dispatch(slice.actions.startLoading());
-  try {
-    await apiService.delete(`/posts/${postId}`);
-    dispatch(slice.actions.deletePostSuccess(postId));
+export const updatePost =
+  ({ content, image, id }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      // upload image to cloudinary
+      const imageUrl = await cloudinaryUpload(image);
+      const response = await apiService.put(`/posts/${id}`, {
+        content,
+        image: imageUrl,
+      });
 
-    toast.success("Post removed");
-  } catch (error) {
-    dispatch(slice.actions.hasError(error.message));
-    toast.error(error.message);
-  }
-};
+      dispatch(slice.actions.updatePostSuccess(response.data));
+      toast.success("Edit successfully");
+      const element = document.getElementById(id);
+      element.scrollIntoView();
+      dispatch(getCurrentUserProfile());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const removePost =
+  ({ postId, authorId }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await apiService.delete(`/posts/${postId}`);
+      dispatch(slice.actions.deletePostSuccess(postId));
+      console.log("authorId", authorId, postId);
+
+      dispatch(getPosts({ userId: authorId, page: 1 }));
+      toast.success("Post removed");
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
 
 export const sendPostReaction =
   ({ postId, emoji }) =>

@@ -9,7 +9,7 @@ import {
   CardHeader,
   IconButton,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { fDate } from "../../utils/formatTime";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -24,8 +24,6 @@ function PostCard({ post }) {
   const dispatch = useDispatch();
   const auth = useAuth();
 
-  let navigate = useNavigate();
-
   const editPost = () => {
     dispatch(selectPost(post._id));
     const element = document.getElementById("create-form");
@@ -33,7 +31,7 @@ function PostCard({ post }) {
   };
 
   return (
-    <Card>
+    <Card id={post?._id}>
       <CardHeader
         disableTypography
         avatar={
@@ -61,16 +59,22 @@ function PostCard({ post }) {
         action={
           auth?.user?._id === post.author._id && (
             <>
-              <IconButton>
-                {/* <MoreVertIcon sx={{ fontSize: 30 }} /> */}
-                <button onClick={() => dispatch(removePost(post._id))}>
-                  Delete
-                </button>
-              </IconButton>
-              <IconButton>
-                {/* <MoreVertIcon sx={{ fontSize: 30 }} /> */}
-                <button onClick={editPost}>Edit</button>
-              </IconButton>
+              {/* <MoreVertIcon sx={{ fontSize: 30 }} /> */}
+              <button
+                onClick={() =>
+                  dispatch(
+                    removePost({
+                      postId: post._id,
+                      authorId: post.author._id,
+                    })
+                  )
+                }
+              >
+                Delete
+              </button>
+
+              {/* <MoreVertIcon sx={{ fontSize: 30 }} /> */}
+              <button onClick={editPost}>Edit</button>
             </>
           )
         }
