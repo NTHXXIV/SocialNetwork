@@ -2,8 +2,16 @@ import React from "react";
 import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
 import { fDate } from "../../utils/formatTime";
 import CommentReaction from "./CommentReaction";
+import { removeComment } from "./commentSlice";
+import { useDispatch } from "react-redux";
+import ModalBtn from "../../components/ModalBtn";
 
 function CommentCard({ comment }) {
+  console.log("comment", comment);
+  const disPatch = useDispatch();
+  const deleteComment = () => {
+    disPatch(removeComment({ commentId: comment?._id, postId: comment?.post }));
+  };
   return (
     <Stack direction="row" spacing={2}>
       <Avatar alt={comment.author?.name} src={comment.author?.avatarUrl} />
@@ -24,8 +32,23 @@ function CommentCard({ comment }) {
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {comment.content}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
           <CommentReaction comment={comment} />
+          <ModalBtn
+            styleBtn={{
+              cursor: "pointer",
+              color: "red",
+              margin: "0 0.5rem",
+            }}
+            text={"X"}
+            onClick={() => deleteComment()}
+          />
         </Box>
       </Paper>
     </Stack>

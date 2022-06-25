@@ -156,7 +156,6 @@ export const removePost =
     try {
       await apiService.delete(`/posts/${postId}`);
       dispatch(slice.actions.deletePostSuccess(postId));
-      console.log("authorId", authorId, postId);
 
       dispatch(getPosts({ userId: authorId, page: 1 }));
       toast.success("Post removed");

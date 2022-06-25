@@ -7,18 +7,17 @@ import {
   Avatar,
   Typography,
   CardHeader,
-  IconButton,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { fDate } from "../../utils/formatTime";
 
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PostReaction from "./PostReaction";
 import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
 import { useDispatch } from "react-redux";
 import { removePost, selectPost } from "../post/postSlice";
 import useAuth from "../../hooks/useAuth";
+import ModalBtn from "../../components/ModalBtn";
 
 function PostCard({ post }) {
   const dispatch = useDispatch();
@@ -59,8 +58,9 @@ function PostCard({ post }) {
         action={
           auth?.user?._id === post.author._id && (
             <>
-              {/* <MoreVertIcon sx={{ fontSize: 30 }} /> */}
-              <button
+              <ModalBtn
+                styleBtn={{ color: "red" }}
+                text={"X"}
                 onClick={() =>
                   dispatch(
                     removePost({
@@ -69,9 +69,7 @@ function PostCard({ post }) {
                     })
                   )
                 }
-              >
-                Delete
-              </button>
+              />
 
               {/* <MoreVertIcon sx={{ fontSize: 30 }} /> */}
               <button onClick={editPost}>Edit</button>

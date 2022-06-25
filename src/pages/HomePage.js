@@ -13,6 +13,7 @@ import ProfileCover from "../features/user/ProfileCover";
 import { capitalCase } from "change-case";
 import AddFriend from "../features/friend/AddFriend";
 import FriendRequests from "../features/friend/FriendRequests";
+import SentRequest from "../features/friend/SentRequest";
 import FriendList from "../features/friend/FriendList";
 
 const TabsWrapperStyle = styled("div")(({ theme }) => ({
@@ -54,6 +55,11 @@ function HomePage() {
       value: "requests",
       icon: <ContactMailIcon sx={{ fontSize: 24 }} />,
       component: <FriendRequests />,
+    },
+    {
+      value: "sentRequests",
+      icon: <ContactMailIcon sx={{ fontSize: 24 }} />,
+      component: <SentRequest />,
     },
     {
       value: "add_friend",
