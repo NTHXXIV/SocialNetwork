@@ -26,6 +26,7 @@ function PostForm() {
   useEffect(() => {
     setValue("content", editingPostId ? postsById[editingPostId].content : "");
     setValue("image", editingPostId ? postsById[editingPostId].image : null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingPostId]);
 
   const methods = useForm({
